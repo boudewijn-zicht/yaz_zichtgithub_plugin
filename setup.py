@@ -16,16 +16,16 @@ if sys.argv[-1] == "publish":
     sys.exit()
 
 setuptools.setup(
-    name='yaz_zichtgithub_plugin',
-    packages=['yaz_zichtgithub_plugin'],
+    name="yaz_zichtgithub_plugin",
+    packages=["yaz_zichtgithub_plugin"],
     version=version,
-    description='A github plugin for YAZ',
-    author='Boudewijn Schoon',
-    author_email='boudewijn@zicht.nl',
+    description="A github plugin for YAZ",
+    author="Boudewijn Schoon",
+    author_email="boudewijn@zicht.nl",
     url="http://github.com/boudewijn-zicht/yaz_zichtgithub_plugin",
-    license='MIT',
+    license="MIT",
     zip_safe=False,
-    install_requires=['yaz'],
+    install_requires=["yaz", "pygithub", "texttable"],
     scripts=["bin/yaz-zichtgithub"],
     test_suite="nose.collector",
     tests_require=["nose", "coverage"],
