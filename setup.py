@@ -25,8 +25,14 @@ setuptools.setup(
     url="http://github.com/boudewijn-zicht/yaz_zichtgithub_plugin",
     license="MIT",
     zip_safe=False,
-    install_requires=["yaz", "pygithub", "texttable"],
-    scripts=["bin/yaz-zichtgithub"],
+    install_requires=[
+        "yaz",
+        "pygithub",
+        # spreadsheet requirements
+        "gspread",
+        "oauth2client",
+    ],
+    scripts=["bin/yaz-zicht-dependency-matrix"],
     test_suite="nose.collector",
     tests_require=["nose", "coverage"],
     classifiers=[
