@@ -2,7 +2,7 @@ import os
 import setuptools
 import sys
 
-version = "0.0.1"
+from yaz_zichtgithub_plugin.version import version
 
 if sys.argv[-1] == "tag":
     os.system("git tag -a {} -m \"Release {}\"".format(version, version))
