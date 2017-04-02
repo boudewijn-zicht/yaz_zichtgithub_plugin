@@ -6,7 +6,7 @@ import json
 import yaz
 
 from .version import __version__
-from .spreadsheet import VersionMatrixWorksheet
+from .spreadsheet import VersionMatrixSheet
 from .github import Github
 from .log import set_verbose
 
@@ -26,22 +26,23 @@ class DependencyMatrix(yaz.BasePlugin):
         self.github = github.get_service()
 
     @yaz.task
-    def version(self):
+    def version(self, verbose: bool = False):
+        set_verbose(verbose)
         return __version__
 
     @yaz.task
     def update_spreadsheet(self, limit: int = 666, verbose: bool = False):
         set_verbose(verbose)
 
-        worksheet = VersionMatrixWorksheet(os.path.expanduser(self.json_key_file), self.sheet_key)
-        worksheet.set_updating()
+        sheet = VersionMatrixSheet(os.path.expanduser(self.json_key_file), self.sheet_key)
+        sheet.set_updating()
         try:
             for repo in self.get_repos()[:limit]:
                 dependencies = self.get_dependencies(repo)
                 if dependencies:
-                    worksheet.set_dependencies(repo, dependencies)
+                    sheet.set_dependencies(repo, dependencies)
         finally:
-            worksheet.unset_updating()
+            sheet.unset_updating()
 
     def get_repos(self):
         return self.github.get_user().get_repos()
