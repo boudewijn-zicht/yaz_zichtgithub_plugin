@@ -5,10 +5,12 @@ import github.GithubObject
 import json
 import yaz
 
-from .version import version
+from .version import __version__
 from .spreadsheet import VersionMatrixWorksheet
 from .github import Github
 from .log import set_verbose
+
+__all__ = ["DependencyMatrix"]
 
 
 class DependencyMatrix(yaz.BasePlugin):
@@ -25,7 +27,7 @@ class DependencyMatrix(yaz.BasePlugin):
 
     @yaz.task
     def version(self):
-        return version
+        return __version__
 
     @yaz.task
     def update_spreadsheet(self, limit: int = 666, verbose: bool = False):

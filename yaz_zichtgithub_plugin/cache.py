@@ -2,6 +2,9 @@ from .log import logger
 from yaz.decorator import decorator
 import functools
 
+__all__ = ["cache"]
+
+
 @decorator
 def cache(func):
     def generate_key(args, kwargs):
@@ -23,4 +26,3 @@ def cache(func):
 
     _cache = {}
     return wrapper
-

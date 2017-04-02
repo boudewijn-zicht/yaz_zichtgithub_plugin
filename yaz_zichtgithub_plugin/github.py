@@ -1,6 +1,9 @@
 import github
 import yaz
 
+__all__ = ["Github"]
+
+
 class Github(yaz.BasePlugin):
     login = None
     password = None
@@ -13,4 +16,3 @@ class Github(yaz.BasePlugin):
 
     def get_service(self):
         return self.service
-

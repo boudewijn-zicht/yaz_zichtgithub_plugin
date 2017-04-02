@@ -5,6 +5,8 @@ import gspread
 from .cache import cache
 from .log import logger
 
+__all__ = ["VersionMatrixWorksheet"]
+
 
 class VersionMatrixWorksheet:
     def __init__(self, json_key_file: str, sheet_key: str):
