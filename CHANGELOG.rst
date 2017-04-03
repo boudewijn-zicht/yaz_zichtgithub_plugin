@@ -10,6 +10,9 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`_.
 [Unreleased]
 ------------
 
+0.1.0
+-----
+
 Added: support for multiple worksheets
 Added: only use columns and rows marked with 'any'
 
