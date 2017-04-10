@@ -10,6 +10,11 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`_.
 [Unreleased]
 ------------
 
+0.2.0
+-----
+
+Added: a tool to perform regexp search on repo files
+
 0.1.0
 -----
 

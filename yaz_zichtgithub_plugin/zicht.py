@@ -1,5 +1,5 @@
 import os
-
+import re
 import github
 import github.GithubObject
 import json
@@ -8,9 +8,9 @@ import yaz
 from .version import __version__
 from .spreadsheet import VersionMatrixSheet
 from .github import Github
-from .log import set_verbose
+from .log import logger, set_verbose
 
-__all__ = ["DependencyMatrix"]
+__all__ = ["DependencyMatrix", "GithubFinder"]
 
 
 class DependencyMatrix(yaz.BasePlugin):
@@ -55,3 +55,27 @@ class DependencyMatrix(yaz.BasePlugin):
         data = json.loads(file.decoded_content.decode())
 
         return {package['name']: package['version'].strip() for package in data['packages']}
+
+class GithubFinder(yaz.BasePlugin):
+    @yaz.dependency
+    def set_github(self, github: Github):
+        self.github = github.get_service()
+
+    @yaz.task
+    def search(self, pattern: str, filename: str = "/README.md", verbose: bool = False):
+        set_verbose(verbose)
+        exp = re.compile(pattern)
+
+        for repo in self.github.get_user().get_repos():
+            try:
+                file = repo.get_file_contents(filename)
+            except github.GithubException:
+                logger.debug("%s: no file found", repo.name)
+                continue
+
+            content = file.decoded_content.decode()
+            if exp.search(content):
+                print(repo.name)
+            else:
+                logger.debug("%s: no match found", repo.name)
+
