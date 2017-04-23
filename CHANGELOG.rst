@@ -10,6 +10,11 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`_.
 [Unreleased]
 ------------
 
+0.2.1
+-----
+
+Changed: references to yaz/yaz_zichtgithub_plugin because the repository changed owner
+
 0.2.0
 -----
 

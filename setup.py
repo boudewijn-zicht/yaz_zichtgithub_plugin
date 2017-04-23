@@ -23,8 +23,8 @@ setuptools.setup(
     version=version,
     description="A github plugin for YAZ",
     author="Boudewijn Schoon",
-    author_email="boudewijn@zicht.nl",
-    url="http://github.com/boudewijn-zicht/yaz_zichtgithub_plugin",
+    author_email="yaz@frayja.nl",
+    url="http://github.com/yaz/yaz_zichtgithub_plugin",
     license="MIT",
     zip_safe=False,
     install_requires=[
