@@ -31,30 +31,60 @@ class DependencyMatrix(yaz.BasePlugin):
         return __version__
 
     @yaz.task
-    def update_spreadsheet(self, limit: int = 666, verbose: bool = False):
+    def update_repo(self, user: str, name: str, verbose: bool = False):
         set_verbose(verbose)
 
         sheet = VersionMatrixSheet(os.path.expanduser(self.json_key_file), self.sheet_key)
         sheet.set_updating()
         try:
-            for repo in self.get_repos()[:limit]:
-                dependencies = self.get_dependencies(repo)
+            repo = self.github.get_user(user).get_repo(name)
+            dependencies = {}
+            dependencies.update(self.get_composer_dependencies(repo))
+            dependencies.update(self.get_npm_dependencies(repo))
+            if dependencies:
+                sheet.set_dependencies(repo, dependencies)
+        finally:
+            sheet.unset_updating()
+
+    @yaz.task
+    def update_all(self, limit: int = 666, verbose: bool = False):
+        set_verbose(verbose)
+
+        sheet = VersionMatrixSheet(os.path.expanduser(self.json_key_file), self.sheet_key)
+        sheet.set_updating()
+        try:
+            for repo in self.github.get_user().get_repos()[:limit]:
+                dependencies = {}
+                dependencies.update(self.get_composer_dependencies(repo))
+                dependencies.update(self.get_npm_dependencies(repo))
                 if dependencies:
                     sheet.set_dependencies(repo, dependencies)
         finally:
             sheet.unset_updating()
 
-    def get_repos(self):
-        return self.github.get_user().get_repos()
-
-    def get_dependencies(self, repo, ref=github.GithubObject.NotSet):
+    def get_composer_dependencies(self, repo, ref=github.GithubObject.NotSet):
         try:
             file = repo.get_file_contents('/composer.lock', ref)
         except github.GithubException:
             return {}
         data = json.loads(file.decoded_content.decode())
 
-        return {package['name']: package['version'].strip() for package in data['packages']}
+        return {"composer {}".format(package['name']): package['version'].strip() for package in data['packages']}
+
+    def get_npm_dependencies(self, repo, ref=github.GithubObject.NotSet):
+        try:
+            file = repo.get_file_contents('/package-lock.json', ref)
+        except github.GithubException:
+            try:
+                file = repo.get_file_contents('/javascript/package-lock.json', ref)
+            except github.GithubException:
+                return {}
+        data = json.loads(file.decoded_content.decode())
+
+        if "dependencies" not in data:
+            return {}
+
+        return {"npm {}".format(name): dependency["version"].strip() for name, dependency in data['dependencies'].items()}
 
 class GithubFinder(yaz.BasePlugin):
     @yaz.dependency
