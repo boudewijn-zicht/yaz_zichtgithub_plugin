@@ -5,14 +5,13 @@ __all__ = ["Github"]
 
 
 class Github(yaz.BasePlugin):
-    login = None
-    password = None
+    token = None
 
     def __init__(self):
-        if not (self.login and self.password):
-            raise RuntimeError("The login and password must be specified, please add a Github plugin override in your user directory")
+        if not (self.token):
+            raise RuntimeError("The personal access token must be specified, please add a Github plugin override in your user directory")
 
-        self.service = github.Github(self.login, self.password)
+        self.service = github.Github(self.token)
 
     def get_service(self):
         return self.service
