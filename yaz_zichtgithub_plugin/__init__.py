@@ -1,1 +1,1 @@
-from .zicht import DependencyMatrix, GithubFinder
+from .zicht import DependencyMatrix, GithubScanner, GithubFinder

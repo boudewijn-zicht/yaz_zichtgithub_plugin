@@ -10,6 +10,11 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`_.
 [Unreleased]
 ------------
 
+0.4.0
+-----
+
+Added: new task to scan the repository and summarize it
+
 0.3.0
 -----
 

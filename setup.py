@@ -33,6 +33,7 @@ setuptools.setup(
         # spreadsheet requirements
         "gspread",
         "oauth2client",
+        "tabulate"
     ],
     scripts=["bin/yaz-zicht-dependency-matrix"],
     test_suite="nose.collector",
