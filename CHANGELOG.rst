@@ -10,6 +10,12 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`_.
 [Unreleased]
 ------------
 
+0.3.0
+-----
+
+Added: new task update-repo
+Changed: renamed update-spreadsheet to update-all
+
 0.2.1
 -----
 
