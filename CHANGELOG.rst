@@ -10,6 +10,11 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`_.
 [Unreleased]
 ------------
 
+0.5.1
+-----
+
+- Fixed: the entry-points scripts are now properly exported and installed
+
 0.5.0
 -----
 
