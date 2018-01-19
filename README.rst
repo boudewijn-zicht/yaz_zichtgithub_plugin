@@ -10,10 +10,21 @@ Installing
 
     .. code-block:: bash
 
+        # Install or upgrade from the main repository
         pip3 install --upgrade yaz_zichtgithub_plugin
 
-        # Call the installed script
-        yaz-zichtgithub
+        # Configure ~/.yaz/yaz_extension/__init__.py to include Github.token,
+        # and settings for DependencyMatrix and RepositoryList (these contain
+        # personal information and will not be included here)
+
+        # Call one of the  installed scripts
+        yaz-zicht-dependency-matrix
+
+        # Or
+        yaz-zicht-repository-list
+
+        # Or
+        yaz-zicht-github-finder
 
 
 Developing
@@ -46,7 +57,7 @@ Developing
         deactivate
 
 
-Maintainer(s)
--------------
+Maintainer
+----------
 
 - Boudewijn Schoon <boudewijn@zicht.nl>

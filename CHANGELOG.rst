@@ -10,34 +10,40 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`_.
 [Unreleased]
 ------------
 
+0.5.0
+-----
+
+- Added: yaz plugin to scan the repository and update a google sheet with separated by repo type
+- Changed: the file structure to be more maintainable
+
 0.4.0
 -----
 
-Added: new task to scan the repository and summarize it
+- Added: new task to scan the repository and summarize it
 
 0.3.0
 -----
 
-Added: new task update-repo
-Changed: renamed update-spreadsheet to update-all
+- Added: new task update-repo
+- Changed: renamed update-spreadsheet to update-all
 
 0.2.1
 -----
 
-Changed: references to yaz/yaz_zichtgithub_plugin because the repository changed owner
+- Changed: references to yaz/yaz_zichtgithub_plugin because the repository changed owner
 
 0.2.0
 -----
 
-Added: a tool to perform regexp search on repo files
+- Added: a tool to perform regexp search on repo files
 
 0.1.0
 -----
 
-Added: support for multiple worksheets
-Added: only use columns and rows marked with 'any'
+- Added: support for multiple worksheets
+- Added: only use columns and rows marked with 'any'
 
 0.0.2
 -----
 
-Working importer.  Running from Jenkins daily.
+- Working importer.  Running from Jenkins daily.
