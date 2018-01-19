@@ -51,7 +51,8 @@ Developing
         nosetests --with-cover --cover-html --cover-package yaz_zichtgithub_plugin
 
         # Upload a new release to pypi
-        python setup.py sdist upload --repository pypi
+        python setup.py tag
+        python setup.py publish
 
         # Once you are done... exit your virtual environment
         deactivate
