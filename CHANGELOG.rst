@@ -10,15 +10,24 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`_.
 [Unreleased]
 ------------
 
+0.5.2
+-----
+
+- Fixed: the shebang of the scipts no longer use /usr/bin/env.  This
+  prevents the pip installer from expanding the path when the python
+  wheel is generated
+
 0.5.1
 -----
 
-- Fixed: the entry-points scripts are now properly exported and installed
+- Fixed: the entry-points scripts are now properly exported and
+  installed
 
 0.5.0
 -----
 
-- Added: yaz plugin to scan the repository and update a google sheet with separated by repo type
+- Added: yaz plugin to scan the repository and update a google sheet
+  with separated by repo type
 - Changed: the file structure to be more maintainable
 
 0.4.0
@@ -35,7 +44,8 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`_.
 0.2.1
 -----
 
-- Changed: references to yaz/yaz_zichtgithub_plugin because the repository changed owner
+- Changed: references to yaz/yaz_zichtgithub_plugin because the
+  repository changed owner
 
 0.2.0
 -----
