@@ -1,3 +1,4 @@
+import time
 import gspread
 import typing
 
@@ -10,13 +11,42 @@ __all__ = ["Worksheet", "VersionMatrixSheet", "VersionMatrixWorksheet"]
 
 class Worksheet:
     @cache(key=lambda self, *args, **kwargs: (self.worksheet.id, args, kwargs))
+    def get_cell(self, col, row) -> gspread.Cell:
+        try:
+            return self.worksheet.cell(col, row)
+        except:
+            logger.warn("Worksheet #%s: error getting cell (%s, %s).  Out of quota?  retrying once!", self.worksheet.id, col, row)
+            time.sleep(5.0)
+            return self.worksheet.cell(col, row)
+
+    @cache(key=lambda self, *args, **kwargs: (self.worksheet.id, args, kwargs))
     def get_row(self, row, min_col=2) -> typing.List[gspread.Cell]:
-        return [cell for cell in self.worksheet.range(row, 1, row, self.worksheet.col_count) if cell.col >= min_col]
+        try:
+            return [cell for cell in self.worksheet.range(row, 1, row, self.worksheet.col_count) if cell.col >= min_col]
+        except:
+            logger.warn("Worksheet #%s: error getting row %s.  Out of quota?  retrying once!", self.worksheet.id, row)
+            time.sleep(5.0)
+            return [cell for cell in self.worksheet.range(row, 1, row, self.worksheet.col_count) if cell.col >= min_col]
 
     @cache(key=lambda self, *args, **kwargs: (self.worksheet.id, args, kwargs))
     def get_column(self, col, min_row=2) -> typing.List[gspread.Cell]:
-        return [cell for cell in self.worksheet.range(1, col, self.worksheet.row_count, col) if cell.row >= min_row]
+        try:
+            return [cell for cell in self.worksheet.range(1, col, self.worksheet.row_count, col) if cell.row >= min_row]
+        except:
+            logger.warn("Worksheet #%s: error getting column %s.  Out of quota?  retrying once!", self.worksheet.id, col)
+            time.sleep(5.0)
+            return [cell for cell in self.worksheet.range(1, col, self.worksheet.row_count, col) if cell.row >= min_row]
 
+    def set_cells(self, cells):
+        if cells:
+            try:
+                logger.info("Worksheet #%s: persisting %s cells", self.worksheet.id, len(cells))
+                self.worksheet.update_cells(cells)
+            except:
+                logger.warn("Worksheet #%s: error updating %s cells.  Out of quota?  retrying once!", self.worksheet.id, cells.length)
+                time.sleep(5.0)
+                self.worksheet.update_cells(cells)
+        
     @staticmethod
     def __find_existing_cell(cells: typing.List[gspread.Cell], value: str) -> typing.Optional[gspread.Cell]:
         for cell in cells:

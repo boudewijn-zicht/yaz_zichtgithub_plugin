@@ -43,6 +43,7 @@ Developing
         # Setup your virtual environment
         virtualenv --python=python3 env
         source env/bin/activate
+        python setup.py develop
 
         # Run tests
         python setup.py test

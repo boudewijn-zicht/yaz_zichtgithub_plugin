@@ -156,19 +156,17 @@ class RepositoryListWorksheet(Worksheet):
                         cell.value = ""
                         updated_cells.append(cell)
 
-        if updated_cells:
-            logger.info("Worksheet #%s: persisting %s cells", self.worksheet.id, len(updated_cells))
-            self.worksheet.update_cells(updated_cells)
+        self.set_cells(updated_cells)
 
     def set_updating(self, message: str = "UPDATING"):
-        cell = self.worksheet.cell(1, 1)
+        cell = self.get_cell(1, 1)
         cell.value = message.format(now=datetime.now())
-        self.worksheet.update_cells([cell])
+        self.set_cells([cell])
 
     def unset_updating(self, message: str = "{now}"):
-        cell = self.worksheet.cell(1, 1)
+        cell = self.get_cell(1, 1)
         cell.value = message.format(now=datetime.now())
-        self.worksheet.update_cells([cell])
+        self.set_cells([cell])
 
 
 class RepositoryList(yaz.BasePlugin):

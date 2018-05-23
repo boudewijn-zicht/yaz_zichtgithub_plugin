@@ -10,6 +10,13 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`_.
 [Unreleased]
 ------------
 
+0.5.3
+-----
+
+- Added: throttle checks, i.e. when a read or write action fails,
+  a 5 second delay is imposed and we try again.  This retry can only
+  occur once.
+
 0.5.2
 -----
 
