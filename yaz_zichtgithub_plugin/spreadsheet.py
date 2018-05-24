@@ -43,7 +43,7 @@ class Worksheet:
                 logger.info("Worksheet #%s: persisting %s cells", self.worksheet.id, len(cells))
                 self.worksheet.update_cells(cells)
             except:
-                logger.warn("Worksheet #%s: error updating %s cells.  Out of quota?  retrying once in 35 seconds!", self.worksheet.id, cells.length)
+                logger.warn("Worksheet #%s: error updating %s cells.  Out of quota?  retrying once in 35 seconds!", self.worksheet.id, len(cells))
                 time.sleep(35.0)
                 self.worksheet.update_cells(cells)
         

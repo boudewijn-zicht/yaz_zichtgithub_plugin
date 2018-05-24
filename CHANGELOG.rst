@@ -10,6 +10,11 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`_.
 [Unreleased]
 ------------
 
+0.5.5
+-----
+
+- Fixed: changed `cells.length` into `len(cells)`.  This is not typescript :p
+
 0.5.4
 -----
 
