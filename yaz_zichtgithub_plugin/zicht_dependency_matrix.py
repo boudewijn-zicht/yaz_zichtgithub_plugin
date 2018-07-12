@@ -47,10 +47,9 @@ class VersionMatrixWorksheet(Worksheet):
 
         column_header = self.find_or_create_column_header(repo.name, updated_cells)
         if column_header is None:
-            logger.debug("Worksheet #%s: skipping %s because there is no column available", self.worksheet.id,
-                         repo.name)
+            logger.debug("Skipping %s because there is no column available (%s)", repo.name, self.worksheet.id)
             return
-        logger.info("Worksheet #%s: checking %s in column #%s", self.worksheet.id, repo.name, column_header.col)
+        logger.info("Checking %s in column #%s (%s)", repo.name, column_header.col, self.worksheet.id)
 
         version_column = {cell.row: cell for cell in self.get_column(column_header.col)}
         checked_rows = set()
@@ -59,8 +58,7 @@ class VersionMatrixWorksheet(Worksheet):
         for dependency, version in dependencies.items():
             row_header = self.find_or_create_row_header(dependency, updated_cells)
             if row_header is None:
-                logger.debug("Worksheet #%s: skipping %s because there is no row available", self.worksheet.id,
-                             dependency)
+                logger.debug("Skipping %s because there is no row available (%s)", dependency, self.worksheet.id)
                 continue
 
             checked_rows.add(row_header.row)
@@ -72,8 +70,7 @@ class VersionMatrixWorksheet(Worksheet):
                 version_column[row_header.row] = cell
 
             if cell.value != version:
-                logger.info("Worksheet #%s: update dependency %s from \"%s\" to \"%s\"", self.worksheet.id, dependency,
-                            cell.value, version)
+                logger.info("Update dependency %s from \"%s\" to \"%s\" (%s)", dependency, cell.value, version, self.worksheet.id)
                 cell.value = version
                 updated_cells.append(cell)
 
@@ -85,7 +82,6 @@ class VersionMatrixWorksheet(Worksheet):
                     updated_cells.append(cell)
 
         self.set_cells(updated_cells)
-
 
     def set_updating(self, message: str = "UPDATING"):
         cell = self.get_cell(1, 1)

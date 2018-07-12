@@ -121,8 +121,7 @@ class RepositoryListWorksheet(Worksheet):
 
     def update(self, repo: ZichtRepository):
         if not repo.is_zicht_repository:
-            logger.debug("Worksheet #%s: skipping %s because the repo is not owned by zicht", self.worksheet.id,
-                         repo.name)
+            logger.debug("Skipping %s because the repo is not owned by Zicht (%s)", repo.name, self.worksheet.id)
             return
 
         updated_cells = []
@@ -131,9 +130,9 @@ class RepositoryListWorksheet(Worksheet):
             # add or update the repo on this worksheet
             row_header = self.find_or_create_row_header(repo.identity, updated_cells)
             if row_header is None:
-                logger.debug("Worksheet #%s: skipping %s because there is no row available", self.worksheet.id, repo.name)
+                logger.debug("Skipping %s because there is no row available (%s)", repo.name, self.worksheet.id)
                 return
-            logger.info("Worksheet #%s: checking %s in column #%s", self.worksheet.id, repo.name, row_header.col)
+            logger.info("Checking %s in column #%s (%s)", repo.name, row_header.col, self.worksheet.id)
 
             # the column_headers contains the top cell of the column indexed by their name
             # when one of these names corresponds to a valid repo data source, the associated column is updated
