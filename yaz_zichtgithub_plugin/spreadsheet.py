@@ -61,6 +61,9 @@ class Worksheet:
                 time.sleep(delay)
 
     def set_cells(self, cells):
+        if not cells:
+            return
+
         retries = [305, 135, 35]
         while True:
             try:

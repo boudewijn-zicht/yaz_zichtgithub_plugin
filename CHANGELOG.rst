@@ -10,6 +10,11 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`_.
 [Unreleased]
 ------------
 
+0.5.7
+-----
+
+- Fixed: trying to persist zero cells is now properly ignored
+
 0.5.6
 -----
 
