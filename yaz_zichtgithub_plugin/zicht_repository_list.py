@@ -1,4 +1,6 @@
 from datetime import datetime
+from random import shuffle
+
 from oauth2client.service_account import ServiceAccountCredentials
 import github
 import github.GithubObject
@@ -131,7 +133,7 @@ class RepositoryListWorksheet(Worksheet):
             if row_header is None:
                 logger.debug("Worksheet #%s: skipping %s because there is no row available", self.worksheet.id, repo.name)
                 return
-            logger.info("Worksheet #%s: updating %s in column #%s", self.worksheet.id, repo.name, row_header.col)
+            logger.info("Worksheet #%s: checking %s in column #%s", self.worksheet.id, repo.name, row_header.col)
 
             # the column_headers contains the top cell of the column indexed by their name
             # when one of these names corresponds to a valid repo data source, the associated column is updated
@@ -210,10 +212,15 @@ class RepositoryList(yaz.BasePlugin):
         """Update the spreadsheet with the summary of all repositories."""
         set_verbose(verbose, debug)
 
+        logger.info('Fetching repositories')
+        repos = list(self.github.get_user().get_repos()[:limit])
+        shuffle(repos)
+        logger.info('Fetched %s repositories', len(repos))
+
         sheet = RepositoryListSheet(os.path.expanduser(self.json_key_file), self.sheet_key)
         sheet.set_updating()
         try:
-            for repo in self.github.get_user().get_repos()[:limit]:
+            for repo in repos:
                 repo = ZichtRepository(repo)
                 sheet.update(repo)
         finally:

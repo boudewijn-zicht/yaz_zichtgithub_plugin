@@ -1,4 +1,6 @@
 from datetime import datetime
+from random import shuffle
+
 from oauth2client.service_account import ServiceAccountCredentials
 import github
 import github.GithubObject
@@ -48,7 +50,7 @@ class VersionMatrixWorksheet(Worksheet):
             logger.debug("Worksheet #%s: skipping %s because there is no column available", self.worksheet.id,
                          repo.name)
             return
-        logger.info("Worksheet #%s: updating %s in column #%s", self.worksheet.id, repo.name, column_header.col)
+        logger.info("Worksheet #%s: checking %s in column #%s", self.worksheet.id, repo.name, column_header.col)
 
         version_column = {cell.row: cell for cell in self.get_column(column_header.col)}
         checked_rows = set()
@@ -141,10 +143,15 @@ class DependencyMatrix(yaz.BasePlugin):
         """Update the spreadsheet with the dependencies of all repositories."""
         set_verbose(verbose, debug)
 
+        logger.info('Fetching repositories')
+        repos = list(self.github.get_user().get_repos()[:limit])
+        shuffle(repos)
+        logger.info('Fetched %s repositories', len(repos))
+
         sheet = VersionMatrixSheet(os.path.expanduser(self.json_key_file), self.sheet_key)
         sheet.set_updating()
         try:
-            for repo in self.github.get_user().get_repos()[:limit]:
+            for repo in repos:
                 dependencies = {}
                 dependencies.update(self.get_composer_dependencies(repo))
                 dependencies.update(self.get_npm_dependencies(repo))
