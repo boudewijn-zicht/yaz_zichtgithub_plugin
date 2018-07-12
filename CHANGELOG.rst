@@ -10,6 +10,12 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`_.
 [Unreleased]
 ------------
 
+0.5.6
+-----
+
+- Fixed: multiple retries are performed with progressively longer delays
+- Changed: the repos will now be processed in random order
+
 0.5.5
 -----
 
