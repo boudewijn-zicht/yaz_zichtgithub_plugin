@@ -2,7 +2,6 @@ import time
 import gspread
 import typing
 
-
 from .cache import cache
 from .log import logger
 
@@ -12,41 +11,72 @@ __all__ = ["Worksheet", "VersionMatrixSheet", "VersionMatrixWorksheet"]
 class Worksheet:
     @cache(key=lambda self, *args, **kwargs: (self.worksheet.id, args, kwargs))
     def get_cell(self, col, row) -> gspread.Cell:
-        try:
-            return self.worksheet.cell(col, row)
-        except:
-            logger.warn("Worksheet #%s: error getting cell (%s, %s).  Out of quota?  retrying once in 35 seconds!", self.worksheet.id, col, row)
-            time.sleep(35.0)
-            return self.worksheet.cell(col, row)
+        retries = [305, 135, 35]
+        while True:
+            try:
+                return self.worksheet.cell(col, row)
+            except KeyboardInterrupt:
+                raise
+            except:
+                if not retries:
+                    logger.warn("Worksheet #%s: error getting cell (%s, %s).  Out of quota?", self.worksheet.id, col, row)
+                    raise
+
+                delay = retries.pop()
+                logger.warn("Worksheet #%s: error getting cell (%s, %s).  Out of quota?  retrying again in %s seconds!", self.worksheet.id, col, row, delay)
+                time.sleep(delay)
 
     @cache(key=lambda self, *args, **kwargs: (self.worksheet.id, args, kwargs))
     def get_row(self, row, min_col=2) -> typing.List[gspread.Cell]:
-        try:
-            return [cell for cell in self.worksheet.range(row, 1, row, self.worksheet.col_count) if cell.col >= min_col]
-        except:
-            logger.warn("Worksheet #%s: error getting row %s.  Out of quota?  retrying once in 35 seconds!", self.worksheet.id, row)
-            time.sleep(35.0)
-            return [cell for cell in self.worksheet.range(row, 1, row, self.worksheet.col_count) if cell.col >= min_col]
+        retries = [305, 135, 35]
+        while True:
+            try:
+                return [cell for cell in self.worksheet.range(row, 1, row, self.worksheet.col_count) if cell.col >= min_col]
+            except KeyboardInterrupt:
+                raise
+            except:
+                if not retries:
+                    logger.warn("Worksheet #%s: error getting row %s.  Out of quota?", self.worksheet.id, row)
+                    raise
+
+                delay = retries.pop()
+                logger.warn("Worksheet #%s: error getting row %s.  Out of quota?  retrying again in %s seconds!", self.worksheet.id, row, delay)
+                time.sleep(delay)
 
     @cache(key=lambda self, *args, **kwargs: (self.worksheet.id, args, kwargs))
     def get_column(self, col, min_row=2) -> typing.List[gspread.Cell]:
-        try:
-            return [cell for cell in self.worksheet.range(1, col, self.worksheet.row_count, col) if cell.row >= min_row]
-        except:
-            logger.warn("Worksheet #%s: error getting column %s.  Out of quota?  retrying once in 35 seconds!", self.worksheet.id, col)
-            time.sleep(35.0)
-            return [cell for cell in self.worksheet.range(1, col, self.worksheet.row_count, col) if cell.row >= min_row]
+        retries = [305, 135, 35]
+        while True:
+            try:
+                return [cell for cell in self.worksheet.range(1, col, self.worksheet.row_count, col) if cell.row >= min_row]
+            except KeyboardInterrupt:
+                raise
+            except:
+                if not retries:
+                    logger.warn("Worksheet #%s: error getting column %s.  Out of quota?", self.worksheet.id, col)
+                    raise
+
+                delay = retries.pop()
+                logger.warn("Worksheet #%s: error getting column %s.  Out of quota?  retrying again in %s seconds!", self.worksheet.id, col, delay)
+                time.sleep(delay)
 
     def set_cells(self, cells):
-        if cells:
+        retries = [305, 135, 35]
+        while True:
             try:
                 logger.info("Worksheet #%s: persisting %s cells", self.worksheet.id, len(cells))
-                self.worksheet.update_cells(cells)
+                return self.worksheet.update_cells(cells)
+            except KeyboardInterrupt:
+                raise
             except:
-                logger.warn("Worksheet #%s: error updating %s cells.  Out of quota?  retrying once in 35 seconds!", self.worksheet.id, len(cells))
-                time.sleep(35.0)
-                self.worksheet.update_cells(cells)
-        
+                if not retries:
+                    logger.warn("Worksheet #%s: error updating %s cells.  Out of quota?", self.worksheet.id, len(cells))
+                    raise
+
+                delay = retries.pop()
+                logger.warn("Worksheet #%s: error updating %s cells.  Out of quota?  retrying once in %s seconds!", self.worksheet.id, len(cells), delay)
+                time.sleep(delay)
+
     @staticmethod
     def __find_existing_cell(cells: typing.List[gspread.Cell], value: str) -> typing.Optional[gspread.Cell]:
         for cell in cells:
@@ -80,5 +110,3 @@ class Worksheet:
         if not cell:
             cell = self.__create_cell(cells, value, updated_cells)
         return cell
-
-
