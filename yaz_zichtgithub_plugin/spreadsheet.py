@@ -1,11 +1,11 @@
-import time
 import gspread
+import time
 import typing
 
 from .cache import cache
 from .log import logger
 
-__all__ = ["Worksheet", "VersionMatrixSheet", "VersionMatrixWorksheet"]
+__all__ = ["Worksheet"]
 
 
 class Worksheet:
@@ -63,6 +63,9 @@ class Worksheet:
     def set_cells(self, cells):
         if not cells:
             return
+
+        # Sort cells by row and column
+        cells = sorted(cells, key=lambda cell: (cell.row, cell.col))
 
         retries = [305, 135, 35]
         while True:

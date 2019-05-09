@@ -43,6 +43,7 @@ class VersionMatrixWorksheet(Worksheet):
         self.worksheet = worksheet
 
     def set_dependencies(self, repo, dependencies):
+        update = False
         updated_cells = []
 
         column_header = self.find_or_create_column_header(repo.name, updated_cells)
@@ -72,16 +73,23 @@ class VersionMatrixWorksheet(Worksheet):
             if cell.value != version:
                 logger.info("Update dependency %s from \"%s\" to \"%s\" (%s)", dependency, cell.value, version, self.worksheet.id)
                 cell.value = version
-                updated_cells.append(cell)
+                update = True
+            updated_cells.append(cell)
+
+        if update:
+            self.set_cells(updated_cells)
 
         # clear rows that do not have a dependency
+        update = False
+        updated_cells = []
         for cell in version_column.values():
             if cell.row not in checked_rows:
                 if cell.value != "":
                     cell.value = ""
-                    updated_cells.append(cell)
-
-        self.set_cells(updated_cells)
+                    update = True
+                updated_cells.append(cell)
+        if update:
+            self.set_cells(updated_cells)
 
     def set_updating(self, message: str = "UPDATING"):
         cell = self.get_cell(1, 1)
