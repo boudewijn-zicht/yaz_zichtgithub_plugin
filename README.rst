@@ -2,8 +2,20 @@
 A github plugin for YAZ
 =======================
 
-TODO: Short description here
+This YAZ plugin provides three tools:
 
+**yaz-zicht-dependency-matrix**: this tool connects to https://github.com/zicht
+and uses the composer.lock and package-lock.json files to determine the dependencies
+that a project has.  These dependencies are then stored in the associated google sheet
+document.
+
+**yaz-zicht-repository-list**: this tool connects to https://github.com/zicht
+and uses the repository descriptions to determine if the repo represents a library,
+website, utility, or is obsolete.  It when scans the readme file to performs some checks.
+The results are stored in the associated google sheet document.
+
+**yaz-zicht-github-finder**: this tool connects to https://github.com/zicht
+and allows a regexp search on a given file in all available repositories.
 
 Installing
 ----------
@@ -17,7 +29,7 @@ Installing
         # and settings for DependencyMatrix and RepositoryList (these contain
         # personal information and will not be included here)
 
-        # Call one of the  installed scripts
+        # Call one of the installed scripts
         yaz-zicht-dependency-matrix
 
         # Or
