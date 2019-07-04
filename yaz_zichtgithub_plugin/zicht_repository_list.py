@@ -124,6 +124,7 @@ class RepositoryListWorksheet(Worksheet):
             logger.debug("Skipping %s because the repo is not owned by Zicht (%s)", repo.name, self.worksheet.id)
             return
 
+        update = False
         updated_cells = []
 
         if repo.type in self.worksheet.title:
@@ -146,7 +147,8 @@ class RepositoryListWorksheet(Worksheet):
                     value = getattr(repo, attr)
                     if cell.value != value:
                         cell.value = value
-                        updated_cells.append(cell)
+                        update = True
+                    updated_cells.append(cell)
 
         else:
             # remove the repo from this worksheet
@@ -155,9 +157,11 @@ class RepositoryListWorksheet(Worksheet):
                 for cell in self.get_row(row_header.row, 0):
                     if cell.value:
                         cell.value = ""
-                        updated_cells.append(cell)
+                        update = True
+                    updated_cells.append(cell)
 
-        self.set_cells(updated_cells)
+        if update:
+            self.set_cells(updated_cells)
 
     def set_updating(self, message: str = "UPDATING"):
         cell = self.get_cell(1, 1)
