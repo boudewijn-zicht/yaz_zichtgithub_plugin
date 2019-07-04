@@ -35,7 +35,7 @@ setuptools.setup(
         "oauth2client",
         "tabulate"
     ],
-    scripts=["bin/yaz-zicht-dependency-matrix", "bin/yaz-zicht-github-finder", "bin/yaz-zicht-repository-list"],
+    scripts=["bin/yaz-zicht-dependency-matrix", "bin/yaz-zicht-deployed-version", "bin/yaz-zicht-github-finder", "bin/yaz-zicht-repository-list"],
     test_suite="nose.collector",
     tests_require=["nose", "coverage"],
     classifiers=[

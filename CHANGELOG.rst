@@ -10,6 +10,17 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`_.
 [Unreleased]
 ------------
 
+0.5.9
+-----
+
+- Fixed: Added missing binary file to setup.py
+
+
+0.5.8
+-----
+
+- Added: yaz deployed version
+
 0.5.7
 -----
 
