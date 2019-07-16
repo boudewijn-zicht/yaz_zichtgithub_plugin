@@ -181,7 +181,7 @@ class DeployedVersion(yaz.BasePlugin):
 
     def __match_deployment_tag(self, tag: github.Tag.Tag, tags: dict):
         """Returns (flavor, environment, nice-description) tuple."""
-        match = re.match('(?:(?P<flavor>.+)_)?(?P<environment>(?:pre)?(?:testing|staging|production))-env', tag.name)
+        match = re.match('(?:(?P<flavor>.+)_)?(?P<environment>(?:pre)?(?:testing|staging|production)[0-9]*)-env', tag.name)
         if match is None:
             return None, None, None
         else:
