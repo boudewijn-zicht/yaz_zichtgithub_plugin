@@ -10,11 +10,15 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`_.
 [Unreleased]
 ------------
 
+0.5.10
+------
+
+- Fixed: Will now match deployment tags only based on the `-env` postfix
+
 0.5.9
 -----
 
 - Fixed: Added missing binary file to setup.py
-
 
 0.5.8
 -----
