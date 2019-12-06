@@ -41,6 +41,12 @@ class DeployedVersionSheet:
         self.sheet = gc.open_by_key(sheet_key)
         self.worksheets = [DeployedVersionWorksheet(worksheet) for worksheet in self.sheet.worksheets()]
 
+    def get_repo_names(self):
+        names = set()
+        for worksheet in self.worksheets:
+            names.update(worksheet.get_repo_names())
+        return set(names)
+
     def update(self, deploys):
         for worksheet in self.worksheets:
             worksheet.update(deploys)
@@ -57,6 +63,14 @@ class DeployedVersionSheet:
 class DeployedVersionWorksheet(Worksheet):
     def __init__(self, worksheet: gspread.Worksheet):
         self.worksheet = worksheet
+
+    def get_repo_names(self):
+        names = set()
+        for cell in self.get_column(1):
+            match = re.match('^(?P<name>[^ :]+)', cell.value)
+            if match is not None:
+                names.add(match.group('name'))
+        return names
 
     def update(self, deploys):
         update = False
@@ -123,14 +137,14 @@ class DeployedVersion(yaz.BasePlugin):
         table.sort()
         return tabulate.tabulate(table, headers=headers)
 
-    @yaz.task
-    def show_all(self, limit: int = 666, verbose: bool = False, debug: bool = False):
+    @yaz.task(user__help="The repo user, i.e. \"zicht\"")
+    def show_all(self, user: str = 'zicht', verbose: bool = False, debug: bool = False):
         """Display the deployment tags of all repositories."""
         set_verbose(verbose, debug)
 
+        sheet = DeployedVersionSheet(os.path.expanduser(self.json_key_file), self.sheet_key)
         headers = ['repository', 'tag', 'flavor', 'environment', 'nice description', 'sha hash']
-        repos = list(self.github.get_user().get_repos()[:limit])
-        for repo in repos:
+        for repo in self.__get_valid_repos(user, sheet.get_repo_names()):
             table = [deploy.table_row for deploy in self.__get_deploys(repo)]
             if table:
                 table.sort()
@@ -151,22 +165,30 @@ class DeployedVersion(yaz.BasePlugin):
         finally:
             sheet.unset_updating()
 
-    @yaz.task
-    def update_all(self, limit: int = 666, verbose: bool = False, debug: bool = False):
+    @yaz.task(user__help="The repo user, i.e. \"zicht\"")
+    def update_all(self, user: str = "zicht", verbose: bool = False, debug: bool = False):
         """Update the spreadsheet with the deployment tags of all repositories."""
         set_verbose(verbose, debug)
 
         sheet = DeployedVersionSheet(os.path.expanduser(self.json_key_file), self.sheet_key)
         sheet.set_updating()
         try:
-            repos = list(self.github.get_user().get_repos()[:limit])
-            for repo in repos:
+            for repo in self.__get_valid_repos(user, sheet.get_repo_names()):
                 deploys = self.__get_deploys(repo)
                 if deploys:
                     sheet.update(deploys)
         finally:
             sheet.unset_updating()
 
+    def __get_valid_repos(self, user:str, names):
+        userObj = self.github.get_user(user)
+        for name in names:
+            try:
+                yield userObj.get_repo(name)
+            except:
+                logger.warning('Unable to get repository called "%s/%s"', user, name)
+
+    @yaz.task
     def __get_deploys(self, repo):
         deploys = []
         tags = {}
@@ -205,6 +227,9 @@ class DeployedVersion(yaz.BasePlugin):
 
             node = node.parents[0]
             distance += 1
+
+            if distance > 10:
+                return '0.0.0-?-g{sha}'.format(sha=commit.sha[0:8])
 
         return '0.0.0-{distance}-g{sha}'.format(distance=distance, sha=commit.sha[0:8])
 

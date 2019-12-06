@@ -14,6 +14,9 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`_.
 ------
 
 - Fixed the version distance hash, adding the 'g' character indicating a git hash
+- Changed the way that the deployed versions are computed, it will now only process
+  repos that are in the google sheet.  Also, it will no longer try to find the
+  version if it is further away than 9 hops.  This helps the performance considerably.
 
 0.5.10
 ------
