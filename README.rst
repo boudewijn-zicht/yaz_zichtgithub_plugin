@@ -14,7 +14,7 @@ and allows a regexp search on a given file in all available repositories.
 
 **yaz-zicht-deployed-version**: this tool connects to https://github.com/zicht
 and scans for deployment tags with patterns `FLAVOR_ENVIRONMENT-env` where
-`FLAVOR_` is optional and `ENVIRONMENT` is either testing, staging, or production.
+`FLAVOR_` is optional and `ENVIRONMENT` is usually testing, staging, or production.
 The corresponding version tags (`1.2.3` or `1.2.3-DISTANCE-HASH`) are then stored in
 the associated google sheet document.
 

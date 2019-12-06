@@ -198,7 +198,7 @@ class DeployedVersion(yaz.BasePlugin):
                 if distance == 0:
                     return versions[0].name
                 else:
-                    return '{version}-{distance}-{sha}'.format(version=versions[0].name, distance=distance, sha=commit.sha[0:8])
+                    return '{version}-{distance}-g{sha}'.format(version=versions[0].name, distance=distance, sha=commit.sha[0:8])
 
             if len(node.parents) == 0:
                 break
@@ -206,7 +206,7 @@ class DeployedVersion(yaz.BasePlugin):
             node = node.parents[0]
             distance += 1
 
-        return '0.0.0-{distance}-{sha}'.format(distance=distance, sha=commit.sha[0:8])
+        return '0.0.0-{distance}-g{sha}'.format(distance=distance, sha=commit.sha[0:8])
 
     def __iter_parents(self, commit):
         """Iterate over first parent recursively sorted by commit date"""

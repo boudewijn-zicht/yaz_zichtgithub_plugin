@@ -10,6 +10,11 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`_.
 [Unreleased]
 ------------
 
+0.5.11
+------
+
+- Fixed the version distance hash, adding the 'g' character indicating a git hash
+
 0.5.10
 ------
 
