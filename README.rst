@@ -101,6 +101,7 @@ Developing
         ./bin/yaz-zicht-github-finder search boudewijn --verbose
 
         # Upload a new release to pypi
+        # Remember to update the version number in ./version.py
         python setup.py tag
         python setup.py publish
 
