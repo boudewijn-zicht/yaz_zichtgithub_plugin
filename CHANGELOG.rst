@@ -10,6 +10,12 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`_.
 [Unreleased]
 ------------
 
+0.5.12
+------
+
+- Archived repositories will now be marked 'Obsolete' automatically
+  on the repository list
+
 0.5.11
 ------
 

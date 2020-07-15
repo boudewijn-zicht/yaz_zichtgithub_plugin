@@ -40,8 +40,15 @@ class ZichtRepository:
         description = str(self._repository.description).strip()
         match = re.match(r"^(?P<type>library|website|utility|obsolete)\s+-\s+(?P<description>.+)$", description, re.IGNORECASE)
         if match:
-            return match.group("type").capitalize(), match.group("description")
-        return "Other", description
+            type_ = match.group('type').capitalize()
+            description = match.group('description')
+        else:
+            type_ = 'Other'
+
+        if self._repository.archived:
+            type_ = 'Obsolete'
+
+        return type_, description
 
     @property
     def type(self):
